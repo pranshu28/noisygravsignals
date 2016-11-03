@@ -80,3 +80,17 @@ plot(temp_red)
 
 
 #Finding the signal
+hcorr = xcorr(h_red,l_red)
+lcorr = xcorr(l_red,temp_red)
+plot(hcorr)
+plot(lcorr)
+
+startind = #np.where(htime==(min(htime)+15))[0][0]
+endind = #np.where(htime==(min(htime)+17))[0][0]
+hcorr = np.xcorr(h_red[startind:endind], l_red)
+plot(hcorr)
+
+startind = #np.where(htime==(min(htime)+16.25))[0][0]
+endind = #np.where(htime==(min(htime)+16.5))[0][0]
+plot(htime[startind:endind], hcorr[startind:endind])
+plot(htime[startind:endind], lcorr[startind:endind])
