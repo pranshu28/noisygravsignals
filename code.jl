@@ -1,17 +1,18 @@
 using HDF5
 using PyPlot
 using DSP
-using StatsBase
+#using StatsBase
+using Interpolations
 #using PyCall
 #@pyimport numpy as np
 
 #H1_16_32 = h5open("/Data/H-H1_LOSC_16_V1-1126259446-32.hdf5", "r");
-H1_4_32 = h5open("/Data/H-H1_LOSC_4_V1-1126259446-32.hdf5", "r");
+H1_4_32 = h5open("Data/H-H1_LOSC_4_V1-1126259446-32.hdf5", "r");
 #L1_16_32 = h5open("/Data/L-L1_LOSC_16_V1-1126259446-32.hdf5", "r");
-L1_4_32 = h5open("/Data/L-L1_LOSC_4_V1-1126259446-32.hdf5", "r");
-GW=readdlm("/Data/GW150914_4_NR_waveform.txt");
+L1_4_32 = h5open("Data/L-L1_LOSC_4_V1-1126259446-32.hdf5", "r");
+GW=readdlm("Data/GW150914_4_NR_waveform.txt");
 
-n=10000
+n=20000
 #s1=read(H1_16_32["strain"])["Strain"]
 s2=read(H1_4_32["strain"])["Strain"][1:n]
 #s3=read(L1_16_32["strain"])["Strain"]
@@ -27,12 +28,12 @@ close(L1_4_32);
 #Plot the detector strains and the template for comparison
 nt = length(s2)
 interval = m2/nt
-xlabel("Time")
-ylabel("Strain")
-title("Raw")
+#xlabel("Time")
+#ylabel("Strain")
+#title("Raw")
 #x=collect(t2:interval:t2+m2-interval)
-#plot(x,s2)
-plot(s4)
+#plot(s2)
+#plot(s4)
 #plot(GW[:,1],GW[:,2])
 
 
@@ -45,17 +46,23 @@ temp_psd,freq3 = psd(GW[:,2],nft,nft) #temp_psd
 loglog(freq1,sqrt(h_psd))  #asd1
 loglog(freq2,sqrt(l_psd))  #asd2
 loglog(freq3,sqrt(temp_psd))  #temp_asd
+
+h_itp = interpolate((freq1,), h_psd, Gridded(Linear()))
+l_itp = interpolate((freq2,), l_psd, Gridded(Linear()))
+
 #Whitening
-function whiten(strain,i)
-  ft = fft(strain)
-  pd,freq = psd(strain,nft,nft)
-  white_ft = ft / (sqrt(pd /i/2.))                  #####################
+function whiten(strain,psd_,i)
+  strain_len = length(strain)
+  freq = rfftfreq(strain_len,i)
+  hf = rfft(strain)
+  white_ft = hf/(sqrt(psd_[freq] /i/2.))
   white_strain = ifft(white_ft)
+  print(psd_[freq])
   return white_strain
 end
-hstrain_whiten = whiten(s2, interval)
-lstrain_whiten = whiten(s4, interval)
-temp_whiten = whiten(GW[:,2], interval)
+hstrain_whiten = whiten(s2, h_itp, interval)
+lstrain_whiten = whiten(s4, l_itp, interval)
+temp_whiten = whiten(GW[:,2], temp_psd, interval)
 
 responsetype = Bandpass(20/(nft/2.0), 300/(nft/2.0),fs=1000)
 designmethod = Butterworth(4)
@@ -68,8 +75,8 @@ xlabel("Time")
 ylabel("Strain")
 title("Whitened")
 #plot(h_red)
-plot(l_red)
-#plot(temp_red)
+#plot(l_red)
+plot(temp_red)
 
 
 #Finding the signal
