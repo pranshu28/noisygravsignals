@@ -67,33 +67,46 @@ hstrain_whiten = whiten(s2, h_itp, interval)
 lstrain_whiten = whiten(s4, l_itp, interval)
 temp_whiten = whiten(GW[:,2], h_itp, interval)
 
-responsetype = Bandpass(20/(nft/2.0), 300/(nft/2.0),fs=1000)
-designmethod = Butterworth(4)
-h_red = filt(digitalfilter(responsetype, designmethod), hstrain_whiten)
-l_red = filt(digitalfilter(responsetype, designmethod), lstrain_whiten)
-temp_red = filt(digitalfilter(responsetype, designmethod), temp_whiten)
-
 #Plot Whitened data
 xlabel("Time")
 ylabel("Strain")
 title("Whitened")
-plot(h_red)
-plot(l_red)
+responsetype = Bandpass(20/(nft/2.0), 300/(nft/2.0))
+designmethod = Butterworth(4)
+h_red = filt(digitalfilter(responsetype, designmethod), hstrain_whiten)
+#plot(h_red)
+l_red = filt(digitalfilter(responsetype, designmethod), lstrain_whiten)
+#plot(l_red)
+temp_red = filt(digitalfilter(responsetype, designmethod), temp_whiten)
 #plot(temp_red)
 
 
 #Finding the signal
+
+#Plot the correlation between each detection strain and the reference template
 hcorr = xcorr(h_red,temp_red)
 lcorr = xcorr(l_red,temp_red)
 plot(hcorr)
 plot(lcorr)
 
-startind = #np.where(htime==(min(htime)+15))[0][0]
-endind = #np.where(htime==(min(htime)+17))[0][0]
-hcorr = np.xcorr(h_red[startind:endind], temp_red)
+#Plot the whitened H1 strain-template strain correlation between 15 and 17 seconds
+startind = round(Int, 127000*(131072/262143))
+endind = round(Int, 135000*(131072/262143))
+hcorr = xcorr(h_red[startind:endind], temp_red)
 plot(hcorr)
+lcorr = xcorr(l_red[startind:endind], temp_red)
+plot(lcorr)
 
-startind = #np.where(htime==(min(htime)+16.25))[0][0]
-endind = #np.where(htime==(min(htime)+16.5))[0][0]
-plot(htime[startind:endind], hcorr[startind:endind])
-plot(htime[startind:endind], lcorr[startind:endind])
+#Zero in on the event
+startind = 1400
+endind = 6600
+plot(hcorr[startind:endind])
+plot(lcorr[startind:endind])
+
+#Using the time of the event provided by LIGO, see if you found it
+xlabel("Time")
+ylabel("Strain")
+title("Whitened")
+plot(h_red[startind:endind])
+plot(l_red[startind:endind])
+plot(temp_red)
