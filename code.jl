@@ -6,11 +6,11 @@ using Interpolations
 #using PyCall
 #@pyimport numpy as np
 
-#H1_16_32 = h5open("/Data/H-H1_LOSC_16_V1-1126259446-32.hdf5", "r");
-H1_4_32 = h5open("Data/H-H1_LOSC_4_V1-1126259446-32.hdf5", "r");
-#L1_16_32 = h5open("/Data/L-L1_LOSC_16_V1-1126259446-32.hdf5", "r");
-L1_4_32 = h5open("Data/L-L1_LOSC_4_V1-1126259446-32.hdf5", "r");
-GW=readdlm("Data/GW150914_4_NR_waveform.txt");
+#H1_16_32 = h5open("/dataset/H-H1_LOSC_16_V1-1126259446-32.hdf5", "r");
+H1_4_32 = h5open("dataset/H-H1_LOSC_4_V1-1126259446-32.hdf5", "r");
+#L1_16_32 = h5open("/dataset/L-L1_LOSC_16_V1-1126259446-32.hdf5", "r");
+L1_4_32 = h5open("dataset/L-L1_LOSC_4_V1-1126259446-32.hdf5", "r");
+GW=readdlm("dataset/GW150914_4_NR_waveform.txt");
 
 #n=20000
 #s1=read(H1_16_32["strain"])["Strain"]
