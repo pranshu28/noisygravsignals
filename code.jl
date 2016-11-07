@@ -1,7 +1,6 @@
 using HDF5
 using PyPlot
 using DSP
-#using StatsBase
 using Interpolations
 #using PyCall
 #@pyimport numpy as np
@@ -12,11 +11,10 @@ H1_4_32 = h5open("dataset/H-H1_LOSC_4_V1-1126259446-32.hdf5", "r");
 L1_4_32 = h5open("dataset/L-L1_LOSC_4_V1-1126259446-32.hdf5", "r");
 GW=readdlm("dataset/GW150914_4_NR_waveform.txt");
 
-#n=20000
 #s1=read(H1_16_32["strain"])["Strain"]
-s2=read(H1_4_32["strain"])["Strain"]#[1:n]
+s2=read(H1_4_32["strain"])["Strain"]
 #s3=read(L1_16_32["strain"])["Strain"]
-s4=read(L1_4_32["strain"])["Strain"]#[1:n]
+s4=read(L1_4_32["strain"])["Strain"]
 m2=read(H1_4_32["meta"])["Duration"]
 t2=read(H1_4_32["meta"])["GPSstart"]
 
