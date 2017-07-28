@@ -2,8 +2,6 @@ using HDF5
 using PyPlot
 using DSP
 using Interpolations
-#using PyCall
-#@pyimport numpy as np
 
 #H1_16_32 = h5open("/dataset/H-H1_LOSC_16_V1-1126259446-32.hdf5", "r");
 H1_4_32 = h5open("dataset/H-H1_LOSC_4_V1-1126259446-32.hdf5", "r");
