@@ -1,3 +1,6 @@
-# noisygravsignals
-Implementing Noise Reduction and Signal Isolation techniques used in the detection of Gravitational Waves
-at the LIGO Observatories in Julia.
+### SIGNAL PROCESSING WITH GW150914 OPEN DATA
+##### Introduction
+On February 11th, 2016 the Laser Interferometer Gravitational-Wave Observatory (LIGO) released a statement saying that it had successfully been able to detect gravitational waves arriving at the earth from the collision of two black holes over 1.3 billion years ago. It released the signal data for the same through the LIGO Open Source Science Center. Also LIGO put up a tutorial explaining step by step how to rediscover the gravitational waves from the data in Python (https://losc.ligo.org/s/events/GW150914/GW150914_tutorial.html). We decided to take up the same data and try and use Julia for the same task and see how efficient it is when it comes to signal processing.
+###### Importing necessary libraries and reading the data
+The data is available in hdf5 files: Data strain Hanford 32 seconds and data strain Livingston 32 seconds for 16384 Hz and 4096 Hz. There are also files provided with 4096 seconds of observation with same pair of frequencies by Handord and Livingston. Along with these files we will require a theoretical template with same parameters that is expected to generate from the collision of two blackholes. 
+In order to read the data from these files in Julia we need HDF5 package. Also we will require packages like Pyplot for graphical representation of signals, Interpolations and DSP that makes digital signal processing routines easily implementable.
